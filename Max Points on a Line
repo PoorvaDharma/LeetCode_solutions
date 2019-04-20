@@ -1,0 +1,70 @@
+struct myhash{
+   
+   size_t operator() (const pair<int,int> p) const
+   {
+       return (p.frist ^ p.second);
+   }
+}
+
+class Solution {
+public:
+    bool issame(Point a, Point b)
+    {
+        if (a.x==b.x && a.y==b.y)
+            return true;
+        else
+            return false;
+    }
+    
+    int gcd(int a, int b)
+    {
+        if(b==0)
+          return a;
+          
+        return gcd(b,a%b);  
+        
+    }
+    
+    int maxPoints(vector<Point>& point) {
+        
+        int size = point.size();
+        if(!size)
+          return 0;
+        if(size==1)
+          return 1; 
+        
+        unordered_map<pair<int,int>,int,myhash> slopes;
+        
+        int dup,maxL,max=INT_MIN;
+        
+        for(int i =0;i<size;i++)
+        {
+            dup = 1;
+            maxL = INT_MIN;
+            slopes.clear();
+            for(int j=i+1;j<size;j++)
+            {
+                if(!issame(point[i],point[j]))
+                {
+                    int Y = point[j].y - point[i].y;
+                    int X = point[j].x - point[i].x;
+                    
+                    int dv = gcd(X,Y);
+                    slopes[make_pair(X/dv,Y/dv)]++;
+                    
+                    if(slopes[make_pair(X/dv,Y/dv)]>maxL)
+                        maxL = slopes[make_pair(X/dv,Y/dv)];
+                    
+                }
+                else
+                    dup++;   
+            }
+            
+            if(maxL==INT_MIN && max<dup)
+                max = dup;
+            else if(max<maxL+dup)
+                max = maxL+dup;
+        }
+        return max;
+    }
+    
