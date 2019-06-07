@@ -18,6 +18,7 @@ public:
         
         //move the element in front in the list
         //transfer element from callee list at poisition pointed by it to calling list at posotion pointed by begin
+        //destination.splice(des.position,source,source.position)
         l.splice(l.begin(),l,it->second);
         return it->second->second;
     }
